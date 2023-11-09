@@ -31,7 +31,6 @@ interface FlexTextBoxProps {
   value?: string;
   onChangeText: (text: string) => void;
   placeholder: string;
-  error?: string;
   isControlled?: boolean;
   passwordVisibilityToggle?: boolean;
   prefixElement?: React.ReactNode;
@@ -42,6 +41,8 @@ interface FlexTextBoxProps {
   blurAnimation?: boolean;
   suggestions?: string[];
   autocomplete?: boolean;
+  validationRegex?: RegExp; 
+  errorMessage?: string; 
   customStyles?: {
     container?: StyleProp<ViewStyle>;
     prefixContainer?: StyleProp<ViewStyle>;
@@ -49,6 +50,7 @@ interface FlexTextBoxProps {
     input?: StyleProp<TextStyle>;
     button?: StyleProp<ViewStyle>;
     label?: StyleProp<TextStyle>;
+    error?:StyleProp<TextStyle>;
   };
 }
 
@@ -62,7 +64,7 @@ export const FlexTextBox: React.FC<FlexTextBoxProps> = ({
   value,
   onChangeText,
   placeholder,
-  error,
+  // error,
   isControlled,
   passwordVisibilityToggle,
   prefixElement,
@@ -73,6 +75,8 @@ export const FlexTextBox: React.FC<FlexTextBoxProps> = ({
   blurAnimation,
   suggestions,
   autocomplete,
+  validationRegex,
+  errorMessage,
   customStyles,
 }) => {
 
@@ -85,6 +89,7 @@ export const FlexTextBox: React.FC<FlexTextBoxProps> = ({
   const windowDimensions = Dimensions.get('window');
   const screenDimensions = Dimensions.get('screen');
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const [filteredSuggestions, setFilteredSuggestions] = useState<string[]>([]);
   const [dimensions, setDimensions] = useState({ window: windowDimensions, screen: screenDimensions });
 
@@ -93,6 +98,7 @@ export const FlexTextBox: React.FC<FlexTextBoxProps> = ({
   const containerStyle = StyleSheet.flatten([styles.container, customStyles?.container]);
   const prefixStyle = StyleSheet.flatten([styles.prefixContainer, customStyles?.prefixContainer]);
   const suffixStyle = StyleSheet.flatten([styles.suffixContainer, customStyles?.suffixContainer]);
+  const errorStyle = StyleSheet.flatten([styles.errorMessageStyle, customStyles?.error]);
 
   /**
    * 
@@ -110,6 +116,14 @@ export const FlexTextBox: React.FC<FlexTextBoxProps> = ({
     );
     return () => subscription?.remove();
   }, [value, suggestions, autocomplete]);
+
+  const validateInput = (text: string) => {
+    if (validationRegex && !validationRegex.test(text)) {
+      setError(errorMessage || 'Invalid input'); // Set custom error message or use a default one
+    } else {
+      setError(null);
+    }
+  };
 
   /**
    * 
@@ -145,6 +159,7 @@ export const FlexTextBox: React.FC<FlexTextBoxProps> = ({
    */
   const handleChangeText = (text: string) => {
     if (isControlled) {
+      validateInput(text);
       onChangeText(text);
     }
   };
@@ -261,7 +276,9 @@ export const FlexTextBox: React.FC<FlexTextBoxProps> = ({
           />
         )}
       </View>
-      {error && <Text style={{ color: 'red' }}>{error}</Text>}
+      <View style={errorStyle}>
+        {error && <Text style={errorStyle}>{error}</Text>}
+      </View>
     </View>
   );
 };

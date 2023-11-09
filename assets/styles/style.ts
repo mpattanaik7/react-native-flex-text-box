@@ -32,4 +32,21 @@ export const styles = StyleSheet.create({
     suffixContainer: {
         marginRight: 10,
     },
+    errorMessageStyle: {
+        color: 'red',
+        marginTop: 0,
+        minHeight: 20
+    }, // Add a fixed height for error message container
+    buttonContainer: {
+        backgroundColor: '#2196F3', // Material Design primary color
+        paddingVertical: 12,
+        paddingHorizontal: 24,
+        borderRadius: 4,
+    },
+    buttonText: {
+        color: 'white',
+        fontSize: 16,
+        textAlign: 'center',
+    },
+
 });
