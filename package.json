@@ -1,7 +1,7 @@
 {
   "name": "react-native-flex-text-box",
   "version": "0.1.0",
-  "description": "Extention of react native textbox,fully customizable,interactive,memory optimized textbox for form & nonform usage ",
+  "description": "Extension of react native textbox,fully customizable,interactive,memory optimized textbox for form & no-form usages ",
   "main": "lib/commonjs/index",
   "module": "lib/module/index",
   "types": "lib/typescript/src/index.d.ts",
